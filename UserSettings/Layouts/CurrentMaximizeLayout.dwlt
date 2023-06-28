@@ -186,7 +186,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 2020ffff
+      m_ExpandedIDs: 20d4ffff6ed7ffffa8daffffcaddffff0ae1ffff10e4ffff20e7ffff26eaffff36edffff3cf0ffff54f3ffff86f3ffff3ef5ffff2efbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -743,23 +743,23 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets
+    - Assets/Scenes
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets
+  - Assets/Scenes
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\n1xx1n\Desktop\Bloodline
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 73}
-    m_SelectedIDs: 28060000
-    m_LastClickedID: 1576
-    m_ExpandedIDs: 000000002806000000ca9a3bffffff7f
+    scrollPos: {x: 0, y: 0}
+    m_SelectedIDs: 5a5c0000
+    m_LastClickedID: 23642
+    m_ExpandedIDs: 00000000385c0000565c00008c5c0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
