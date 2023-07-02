@@ -356,15 +356,37 @@ public class Kingdom
 
                         var cubeRenderer = newVisualChild.GetComponentInChildren<Renderer>();
                         Color final_color;
+                        Material frontMaterial;
+                        Material backMaterial = Resources.Load<Material>("BackMaterial");
                         if (child.isMale())
                         {
-                            final_color = (child.isGay())?Color.magenta : Color.blue;
+                            if (child.isGay())
+                            {
+                                frontMaterial = Resources.Load<Material>("GayColorMaterial");
+                                backMaterial = Resources.Load<Material>("GayCardMaterial");
+                            }
+                            else
+                            {
+                                frontMaterial = Resources.Load<Material>("MaleColorMaterial");
+                                backMaterial = Resources.Load<Material>("MaleCardMaterial");
+                            }   
                         }
                         else
                         {
-                            final_color = (child.isGay()) ? Color.yellow : Color.red;
+                            if (child.isGay())
+                            {
+                                frontMaterial = Resources.Load<Material>("LesbianColorMaterial");
+                                backMaterial = Resources.Load<Material>("LesbianCardMaterial");
+                            }
+                            else
+                            {
+                                frontMaterial = Resources.Load<Material>("FemaleColorMaterial");
+                                backMaterial = Resources.Load<Material>("FemaleCardMaterial");
+                            }
+
                         }
-                        cubeRenderer.material.SetColor("_Color", final_color);
+                        Material[] materials = new Material[] { frontMaterial, backMaterial };
+                        cubeRenderer.materials = materials;
 
                         VisualChild vc = newVisualChild.GetComponent<VisualChild>();
                         vc.myChild = child;

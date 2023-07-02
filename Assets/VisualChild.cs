@@ -43,6 +43,10 @@ public class VisualChild : MonoBehaviour
     {
         unselectedPos = transform.position;
         unselectedRotation = transform.rotation;
+        VisualKingdom vk = myChild.getKingdom().myGameObject.GetComponentInChildren<VisualKingdom>();
+        //unselectedRotation = vk.
+        unselectedRotation.y = myChild.getKingdom().myGameObject.transform.rotation.y-70;
+        //unselectedRotation.y = myChild.getKingdom().myGameObject.transform.rotation.y;
         currentPos = unselectedPos;
         y_offset = y_EmptyOffset;
         currentState = ChildState.Activated;
@@ -135,10 +139,27 @@ public class VisualChild : MonoBehaviour
                     bounce = true;
                     Vector3 targetPos = unselectedPos;
                     currentPos = Vector3.Lerp(currentPos, targetPos, Time.deltaTime * 10.0f);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, unselectedRotation, Time.deltaTime*5.0f);
+                    //transform.rotation = Quaternion.Slerp(transform.rotation, unselectedRotation, Time.deltaTime*5.0f);
                 }
                 break;
             case ChildState.Selected:
+                {
+                    Vector3 targetPos = Camera.main.transform.position + Camera.main.transform.forward * 4.0f;
+                    float dist = (currentPos - targetPos).magnitude;
+                    if (dist < 0.1f || currentState == ChildState.Locked)
+                    {
+                        currentState = ChildState.Locked;
+                        currentPos = Vector3.Lerp(currentPos, targetPos, Time.deltaTime * 50.0f);
+                        //currentPos = targetPos;
+                    }
+                    else
+                    {
+                        currentPos = Vector3.Lerp(currentPos, targetPos, Time.deltaTime * 10.0f);
+                    }
+
+                    bounce = false;
+                }
+                break;
             case ChildState.Locked:
                 {
                     Vector3 targetPos = Camera.main.transform.position + Camera.main.transform.forward*4.0f;
