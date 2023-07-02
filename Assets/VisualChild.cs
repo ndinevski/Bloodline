@@ -28,7 +28,7 @@ public class VisualChild : MonoBehaviour
     ChildState currentState;
 
     Vector3 unselectedPos;
-    Quaternion unselectedRotation;
+    //Quaternion unselectedRotation;
     Vector3 currentPos;
 
     public Child myChild;
@@ -42,11 +42,7 @@ public class VisualChild : MonoBehaviour
     public void InitializeChild()
     {
         unselectedPos = transform.position;
-        unselectedRotation = transform.rotation;
-        VisualKingdom vk = myChild.getKingdom().myGameObject.GetComponentInChildren<VisualKingdom>();
-        //unselectedRotation = vk.
-        unselectedRotation.y = myChild.getKingdom().myGameObject.transform.rotation.y-70;
-        //unselectedRotation.y = myChild.getKingdom().myGameObject.transform.rotation.y;
+        //unselectedRotation = transform.rotation;
         currentPos = unselectedPos;
         y_offset = y_EmptyOffset;
         currentState = ChildState.Activated;
@@ -56,7 +52,7 @@ public class VisualChild : MonoBehaviour
 
     private void SetChildState(ChildState cs)
     {
-        if (currentState == ChildState.Selected || currentState==ChildState.Locked)
+        if (currentState == ChildState.Selected || currentState == ChildState.Locked)
         {
             GameLogic.getInstance().DeSelectChild(this.gameObject);
         }
@@ -71,12 +67,12 @@ public class VisualChild : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (currentState==ChildState.Locked)
+        if (currentState == ChildState.Locked)
         {
-            Vector3 targetPos= GameLogic.getInstance().GetSelectedOffset(this.gameObject);
-            
+            Vector3 targetPos = GameLogic.getInstance().GetSelectedOffset(this.gameObject);
+
             currentPos = Vector3.Lerp(currentPos, targetPos, Time.deltaTime * 30.0f);
-            transform.rotation = Quaternion.Slerp(transform.rotation,Camera.main.transform.rotation, Time.deltaTime * 5.0f);
+            //transform.rotation = Quaternion.Slerp(transform.rotation, Camera.main.transform.rotation, Time.deltaTime * 5.0f);
         }
     }
     // Update is called once per frame
@@ -95,9 +91,9 @@ public class VisualChild : MonoBehaviour
             Vector3 toChild = transform.position - Camera.main.transform.position;
             toChild.Normalize();
 
-            if (Vector3.Dot(toChild,ray.direction.normalized)>0.9999 && GameLogic.getInstance().HasEmptySelectionSlot())
+            if (Vector3.Dot(toChild, ray.direction.normalized) > 0.9999 && GameLogic.getInstance().HasEmptySelectionSlot())
             {
-                 SetChildState(ChildState.Selected);
+                SetChildState(ChildState.Selected);
             }
         }
 
@@ -131,7 +127,7 @@ public class VisualChild : MonoBehaviour
                     }
                     y_offset = Mathf.Lerp(y_offset, y_ActivatedOffset, Time.deltaTime);
                     transform.localScale = new Vector3(currentScale, currentScale, currentScale);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, unselectedRotation, Time.deltaTime * 5.0f);
+                    //transform.rotation = Quaternion.Slerp(transform.rotation, unselectedRotation, Time.deltaTime * 5.0f);
                 }
                 break;
             case ChildState.WaitingToBeSelected:
@@ -139,10 +135,11 @@ public class VisualChild : MonoBehaviour
                     bounce = true;
                     Vector3 targetPos = unselectedPos;
                     currentPos = Vector3.Lerp(currentPos, targetPos, Time.deltaTime * 10.0f);
-                    //transform.rotation = Quaternion.Slerp(transform.rotation, unselectedRotation, Time.deltaTime*5.0f);
+                    //transform.rotation = Quaternion.Slerp(transform.rotation, unselectedRotation, Time.deltaTime * 5.0f);
                 }
                 break;
             case ChildState.Selected:
+            case ChildState.Locked:
                 {
                     Vector3 targetPos = Camera.main.transform.position + Camera.main.transform.forward * 4.0f;
                     float dist = (currentPos - targetPos).magnitude;
@@ -157,24 +154,6 @@ public class VisualChild : MonoBehaviour
                         currentPos = Vector3.Lerp(currentPos, targetPos, Time.deltaTime * 10.0f);
                     }
 
-                    bounce = false;
-                }
-                break;
-            case ChildState.Locked:
-                {
-                    Vector3 targetPos = Camera.main.transform.position + Camera.main.transform.forward*4.0f;
-                    float dist = (currentPos - targetPos).magnitude;
-                    if (dist<0.1f || currentState==ChildState.Locked)
-                    {
-                        currentState = ChildState.Locked;
-                        currentPos = Vector3.Lerp(currentPos, targetPos, Time.deltaTime * 50.0f);
-                        //currentPos = targetPos;
-                    }
-                    else
-                    {
-                        currentPos = Vector3.Lerp(currentPos, targetPos, Time.deltaTime * 10.0f);
-                    }
-                    
                     bounce = false;
                 }
                 break;

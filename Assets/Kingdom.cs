@@ -352,6 +352,32 @@ public class Kingdom
                         GameObject newVisualChild = GameObject.Instantiate(vk.childPrefab);
                         newVisualChild.transform.SetParent(ChildParentFolder.transform);
                         newVisualChild.transform.localPosition = new Vector3(childrenCounter - 3, 0, 0);
+                        int y_rotation=0;
+                        if ((getType() == StatusOfKingdom.self) || (getType() == StatusOfKingdom.neutral && this.name=="Kingdom 1"))
+                        {
+                            y_rotation = 70;
+                        }
+                        else if (getType() == StatusOfKingdom.neutral && this.name == "Kingdom 4")
+                        {
+                            y_rotation = -14;
+                        }
+                        else if (getType() == StatusOfKingdom.neutral && this.name == "Kingdom 2")
+                        {
+                            y_rotation = -80;
+                        }
+                        else if (getType() == StatusOfKingdom.neutral && this.name == "Kingdom 3")
+                        {
+                            y_rotation = 90;
+                        }
+                        else if (getType() == StatusOfKingdom.neutral && this.name == "Kingdom 5")
+                        {
+                            y_rotation = 8;
+                        }
+                        else if (getType() == StatusOfKingdom.neutral && this.name == "Kingdom 6")
+                        {
+                            y_rotation = 73;
+                        }
+                        newVisualChild.transform.rotation = Quaternion.Euler(0, y_rotation, 0);
                         child.myGameObject= newVisualChild;
 
                         var cubeRenderer = newVisualChild.GetComponentInChildren<Renderer>();
