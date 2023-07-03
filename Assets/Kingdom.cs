@@ -40,14 +40,14 @@ public class Kingdom
     float percentageOfChange = 0.01f;
     float kingDeathProb = 10f;
 
-    float progressTimer;
+    float progressTimer = 15;
     float maxProgressTime = 15;
 
     int childrenCounter = 0;
 
     private float hapiness;
 
-
+    public static int numAllies = 0;
 
     public enum StatusOfKingdom
     {
@@ -97,7 +97,7 @@ public class Kingdom
 
     public void checkIfSelf()
     {
-        if (getType() == StatusOfKingdom.self)
+        if (getType().Equals(StatusOfKingdom.self))
         {
             if (children.Count <= 0)
             {
@@ -177,21 +177,25 @@ public class Kingdom
   public void checkKingsInProgress()
     {
 
-        foreach(Kingdom kingdom in GameLogic.getInstance().kingdomsByName.Values)
-        {
-            if (kingdom.getType() == StatusOfKingdom.progress)
-            {
-                if (!kingdom.king.isAlive())
-                {
-                    kingdom.setStatusOfKingdom(StatusOfKingdom.neutral);
-                }
-            }
-        }
+        //foreach(Kingdom kingdom in GameLogic.getInstance().kingdomsByName.Values)
+        //{
+        //    if (kingdom.getType() == StatusOfKingdom.progress)
+        //    {
+        //        if (!kingdom.king.isAlive())
+        //        {
+        //            kingdom.setStatusOfKingdom(StatusOfKingdom.neutral);
+        //        }
+        //    }
+        //}
 
     }
 
     public void update()
     {
+        if (numAllies >= 6)
+        {
+            GameLogic.getInstance().gameOver(1);
+        }
         if ((timeKingAge -= Time.deltaTime) < 0)
         {
             ageKing();
@@ -235,11 +239,12 @@ public class Kingdom
         }
 
 
-       if(statusOfKingdom == StatusOfKingdom.progress)
+       if(statusOfKingdom.Equals(StatusOfKingdom.progress))
         {
-            if((progressTimer -= Time.deltaTime) < 0)
+            if((progressTimer -= Time.deltaTime) <= 0)
             {
                 setStatusOfKingdom(StatusOfKingdom.ally);
+                numAllies += 1;
             }
 
             GameObject flag = myGameObject.transform.Find("Kingdom").gameObject.transform.GetChild(0).gameObject;
@@ -247,7 +252,7 @@ public class Kingdom
             var cubeRenderer = flag.GetComponentInChildren<Renderer>();
             cubeRenderer.material.SetColor("_Color", Color.red);
             Vector3 flagPos = flag.transform.position;  
-            flagPos.y += Time.deltaTime*0.5f;
+            flagPos.y += Time.deltaTime*1.1f;
             flag.transform.position = flagPos;
 
         }
@@ -352,19 +357,71 @@ public class Kingdom
                         GameObject newVisualChild = GameObject.Instantiate(vk.childPrefab);
                         newVisualChild.transform.SetParent(ChildParentFolder.transform);
                         newVisualChild.transform.localPosition = new Vector3(childrenCounter - 3, 0, 0);
+                        int y_rotation=0;
+                        if ((getType() == StatusOfKingdom.self) || (this.name=="Kingdom 1"))
+                        {
+                            y_rotation = 70;
+                        }
+                        else if (this.name == "Kingdom 4")
+                        {
+                            y_rotation = -14;
+                        }
+                        else if (this.name == "Kingdom 2")
+                        {
+                            y_rotation = -80;
+                        }
+                        else if (this.name == "Kingdom 3")
+                        {
+                            y_rotation = 90;
+                        }
+                        else if (this.name == "Kingdom 5")
+                        {
+                            y_rotation = 8;
+                        }
+                        else if (this.name == "Kingdom 6")
+                        {
+                            y_rotation = 73;
+                        }
+                        else if (getType() == StatusOfKingdom.enemy)
+                        {
+                            y_rotation = -72;
+                        }
+                        newVisualChild.transform.rotation = Quaternion.Euler(0, y_rotation, 0);
                         child.myGameObject= newVisualChild;
 
                         var cubeRenderer = newVisualChild.GetComponentInChildren<Renderer>();
                         Color final_color;
+                        Material frontMaterial;
+                        Material backMaterial = Resources.Load<Material>("BackMaterial");
                         if (child.isMale())
                         {
-                            final_color = (child.isGay())?Color.magenta : Color.blue;
+                            if (child.isGay())
+                            {
+                                frontMaterial = Resources.Load<Material>("GayColorMaterial");
+                                backMaterial = Resources.Load<Material>("GayCardMaterial");
+                            }
+                            else
+                            {
+                                frontMaterial = Resources.Load<Material>("MaleColorMaterial");
+                                backMaterial = Resources.Load<Material>("MaleCardMaterial");
+                            }   
                         }
                         else
                         {
-                            final_color = (child.isGay()) ? Color.yellow : Color.red;
+                            if (child.isGay())
+                            {
+                                frontMaterial = Resources.Load<Material>("LesbianColorMaterial");
+                                backMaterial = Resources.Load<Material>("LesbianCardMaterial");
+                            }
+                            else
+                            {
+                                frontMaterial = Resources.Load<Material>("FemaleColorMaterial");
+                                backMaterial = Resources.Load<Material>("FemaleCardMaterial");
+                            }
+
                         }
-                        cubeRenderer.material.SetColor("_Color", final_color);
+                        Material[] materials = new Material[] { frontMaterial, backMaterial };
+                        cubeRenderer.materials = materials;
 
                         VisualChild vc = newVisualChild.GetComponent<VisualChild>();
                         vc.myChild = child;
@@ -386,7 +443,19 @@ public class Kingdom
     {
         if (mine.isCompatible(other))
         {
-            marryChild(mine, other);
+            Child mineChild, otherChild;
+            
+            if (mine.getKingdom().getType().Equals(StatusOfKingdom.self))
+            {
+                mineChild = mine;
+                otherChild = other;
+            }
+            else
+            {
+                mineChild = other;
+                otherChild = mine;
+            }
+            marryChild(mineChild, otherChild);
         }
     }
 
@@ -399,8 +468,11 @@ public class Kingdom
         otherChild.getKingdom().getChildren().Remove(otherChild);
         GameObject.Destroy(otherChild.myGameObject);
 
-        otherChild.getKingdom().setStatusOfKingdom(StatusOfKingdom.progress);
-       
+        if (myChild.getKingdom().getType().Equals(StatusOfKingdom.self))
+        {
+            otherChild.getKingdom().setStatusOfKingdom(StatusOfKingdom.progress);
+        }
+        
 
     }
 
@@ -429,8 +501,8 @@ public class Kingdom
     }
     public void setStatusOfKingdom(StatusOfKingdom statusOfKingdom)
     {
-
-        if(statusOfKingdom == StatusOfKingdom.progress)
+        
+        if(statusOfKingdom.Equals(StatusOfKingdom.progress) && this.statusOfKingdom.Equals(StatusOfKingdom.neutral))
         {
             progressTimer = maxProgressTime;
         }
@@ -445,4 +517,5 @@ public class Kingdom
     {
         return name;
     }
+    
 }

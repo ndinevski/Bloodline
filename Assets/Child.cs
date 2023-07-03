@@ -59,6 +59,11 @@ public class Child
 
     internal bool isCompatible(Child childToMarry)
     {
+        //if (childToMarry.getKingdom().getType().Equals(this.getKingdom().getType()))
+        if (childToMarry.getKingdom().getName().Equals(getKingdom().getName()))
+        {
+            return false;
+        }
         if (childToMarry.isMale())
         {
             if(childToMarry.isGay())

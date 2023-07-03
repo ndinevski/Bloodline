@@ -264,8 +264,19 @@ public class GameLogic : MonoBehaviour
             case 0:
                 KingDied.SetActive(true);
                 break;
+            case 1:
+                //GameWon
+                //GameObject deadGameObject = KingDied.transform.GetChild(0).gameObject;
+                TextMeshProUGUI textMeshPro = KingDied.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
+                if (textMeshPro != null)
+                {
+                    textMeshPro.text = "You Won!\nAll Kingdoms are Your Allies!";
+                }
 
+                KingDied.SetActive(true);
+                break;
         }
         
     }
+    
 }
