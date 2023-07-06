@@ -14,6 +14,15 @@
  - After successfully forming alliances with all 6 neutral kingdoms, a celebratory message will appear to acknowledge that you have won the game.<br>
  - As time passes, the king ages, and when the king eventually passes away, the youngest available child becomes the new ruler. However, it is crucial to note that if, at any point in the game, you fail to have any heirs within your kingdom and your king dies, it will result in game loss, and a defeat message will be displayed.<br>
 
+<h3>How to download:</h3>
+ 1. Clone this repository
+ 2. Platform:
+    - Windows - run /Bloodline/Builds/WindowsBuild/bloodline_windows.exe
+    - MacOS/Linux - open the Bloodline repository as a Unity Project with version 2022.2.5f1 and
+                    go to File -> Build Setting, then select the desired platform and press build.
+                    Open the build and run the .exe file.
+ 3. Enjoy the game!
+
 <h3>Credits:</h3>
  - Nikola Dinevski - Programming <br>
  - Petar Atanasovski - Programming <br>
