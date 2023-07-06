@@ -19,7 +19,7 @@
  2. Platform: <br>
     - Windows - run /Bloodline/Builds/WindowsBuild/bloodline_windows.exe <br>
     - MacOS/Linux - open the Bloodline repository as a Unity Project with version 2022.2.5f1 and <br>
-                    go to File -> Build Setting, then select the desired platform and press build. <br>
+                    go to File -> Build Settings, then select the desired platform and press build.
                     Open the build and run the .exe file. <br>
  3. Enjoy the game! <br>
 
